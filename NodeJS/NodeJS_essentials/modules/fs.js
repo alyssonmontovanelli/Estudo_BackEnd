@@ -25,7 +25,7 @@ fs.appendFile(path.join(__dirname, '/test', 'test.txt'),
    }
 );
 
-*/
+
 
 // -- LER ARQUIVO 
 fs.readFile(path.join(__dirname, '/test', 'test.txt'), 'utf8', 
@@ -35,3 +35,6 @@ fs.readFile(path.join(__dirname, '/test', 'test.txt'), 'utf8',
                }
                console.log(data)
             })
+
+
+            */
