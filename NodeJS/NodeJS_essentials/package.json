@@ -1,0 +1,14 @@
+{
+  "name": "nodejs_essentials",
+  "version": "1.0.0",
+  "description": "Curso_Node_JS_FelipeRocha",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "nodemon index.js"
+  },
+  "author": "Alysson Melo",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
