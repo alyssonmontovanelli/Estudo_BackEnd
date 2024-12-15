@@ -3,10 +3,21 @@ const express = require('express')
 const UserModel = require("C:/Estudo_BackEnd/NodeJS/NodeJS_essentials/src/models/user.models.js")
 
 // ---- INICIALIZANDO O EXPRESS
-const app = express()
+const app = express();
 
 // DIZENDO Q SEMPRE SERÁ UTILIZADO JSON nas REQUISIÇÕES
-app.use(express.json())
+app.use(express.json());
+
+// ---------- MIDDLEWARES (Funções executadas antes de qualquer coisa do express)
+app.use((req, res, next) => {
+   console.log(`Request Type: ${req.method}`)
+   console.log(`Content Type: ${req.headers["Content-Type"]}`);
+   console.log(`Data da ação: ${new Date()}`);
+
+   // Importante colocar o next() ao final, para não travar o express
+   next()
+});
+
 
 // app.get("/home", (req, res) =>{
 //    res.status(200).send("<h1>Home - Utilizando ExpressJS</h1>");
@@ -54,7 +65,6 @@ app.get("/users", async (req, res) => {
 });
 
 // ------ CRIANDO USUÁRIO COM POST 
-
 app.post("/users", async (req, res) => {
    try {
       const user = await UserModel.create(req.body)
@@ -65,6 +75,32 @@ app.post("/users", async (req, res) => {
       res.status(500).send(error.message);
    }
 });
+
+// ------- ATUALIZANDO DADOS DE USUARIO COM PATCH
+app.patch("/users/:id", async (req, res) => {
+   try {
+      const id = req.params.id;
+
+      const user = await UserModel.findByIdAndUpdate(id, req.body, { new : true });
+
+      res.status(200).json(user);
+   } catch (error) {
+      res.status(500).send(error.message)
+   }
+})
+
+// ---------- DELETAR USUÁRIOS
+app.delete("/users/:id", async (req, res) => {
+   try {
+      const id = req.params.id;
+
+      const user = await UserModel.findByIdAndDelete(id)
+
+      res.status(200).json(user);      
+   } catch (error) {
+      res.status(500).send(error.message);
+   }
+})
 
 
 // ----- INICIALIZANDO O SERVIDOR
