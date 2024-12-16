@@ -1,4 +1,0 @@
-alyssonmontovanelli
-D7XaAmD6CPF3wQU9
-
-mongodb+srv://alyssonmontovanelli:<db_password>@nodejsessentials.dbs4r.mongodb.net/
