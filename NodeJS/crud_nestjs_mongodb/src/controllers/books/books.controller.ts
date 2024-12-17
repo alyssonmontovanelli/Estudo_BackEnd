@@ -1,15 +1,17 @@
 import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
 
+import { BookDTO } from '../../DTO/books.dto'
+
 @Controller('books')
 export class BooksController {
 
-   @Get()
+   @Get('get')
    getAllBooks(): string {
       return 'Todos os livros estão aquii';
    }
 
    @Post()
-   saveBook(@Body() newBook: string): string {
+   saveBook(@Body() newBook: BookDTO): BookDTO { // mudou o tipo, de string para BookDTO
       return newBook
    }
 
