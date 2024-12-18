@@ -1,9 +1,9 @@
-import { Schema } from 'mongoose'
-import { AuthorSchema } from './author.schema'
+import { Schema } from "mongoose";
+import { authorSchema } from "./author.schema";
 
 export const BookSchema = new Schema({
    name: String,
-   author: [AuthorSchema],
+   author: [authorSchema],
    language: String,
    releaseYear: Number,
    publisher: String,
