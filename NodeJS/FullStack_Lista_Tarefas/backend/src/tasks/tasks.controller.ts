@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Put, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Put, Body, Param, ConflictException } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { Task } from 'src/schemas/tasks.schemas';
 import { CreateTaskDto } from 'src/dto/create-task.dto';
@@ -20,9 +20,17 @@ export class TasksController {
    }
 
    @Post()
-   create(@Body() body: CreateTaskDto) {
+   async create(@Body() body: CreateTaskDto) {
+      try {
+         return await this.tasksService.create(body);
+      } catch (error) {
+         if (error.code == 11000) {
+            throw new ConflictException('Tasks already exists');
+         }
+         throw error;
+      }
       console.log(body)
-      return this.tasksService.create(body);
+      
    }
 
    @Delete(':id')
