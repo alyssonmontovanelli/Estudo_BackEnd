@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Delete, Put, Body, Param, ConflictException } from '@nestjs/common';
+import { 
+   Controller, 
+   Get, 
+   Post, 
+   Delete, 
+   Put, 
+   Body, 
+   Param, 
+   ConflictException, 
+   NotFoundException,
+   HttpCode,
+} from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { Task } from 'src/schemas/tasks.schemas';
 import { CreateTaskDto } from 'src/dto/create-task.dto';
@@ -13,10 +24,11 @@ export class TasksController {
       return this.tasksService.findAll();
    }
 
-   @Get(':id') 
-   findOne(@Param('id') id:string) {
-      console.log(id)
-      return this.tasksService.findOne(id)
+   @Get(':id') // condicional do erro de não aver task
+   async findOne(@Param('id') id:string) {
+      const task = await this.tasksService.findOne(id);
+      if (!task) throw new NotFoundException(`item com o di ${id} não existe`);
+      return task;
    }
 
    @Post()
@@ -28,21 +40,24 @@ export class TasksController {
             throw new ConflictException('Tasks already exists');
          }
          throw error;
-      }
-      console.log(body)
-      
+      }      
    }
 
+   // Lógica aqui é eliminar a task e não retornar ela
+   // e informar o erro caso tente excluir a msm task novamente
    @Delete(':id')
-   delete(@Param('id') id: string) {
-      console.log(id);
-      return this.tasksService.delete(id);
+   @HttpCode(204)
+   async delete(@Param('id') id: string) {
+      const task = await this.tasksService.delete(id); 
+      if (!task) throw new NotFoundException("task not found");
+      return task;
    }
 
    @Put(':id')
-   update(@Param('id') id:string, @Body() body:any) {
-      console.log(id, body)
-      return this.tasksService.update(id, body);
+   async update(@Param('id') id:string, @Body() body:any) {
+      const task = await this.tasksService.update(id, body);
+      if (!task) throw new NotFoundException("task not found");
+      return task; // se encontrar a task, retorna ela
    }
 
 }
