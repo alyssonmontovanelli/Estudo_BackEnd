@@ -2,6 +2,7 @@
 // Usado para criar e gerenciar estados dos componentes
 // Atualizar informações dentro dos componotens
 import { ChangeEvent, FormEvent, useState } from "react"
+import { createTaskRequest } from '../api/tasks'
 
 // Renderiza o formulário para gerenciar a criação das tarefas
 function TaskForm() {
@@ -25,10 +26,13 @@ function TaskForm() {
    ) => setTask({ ...task, [e.target.name]: e.target.value});
    
 
-   const handleSubmit = (
-      e: FormEvent<HTMLFormElement>
-   ) => { e.preventDefault();
+   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => { 
+      e.preventDefault();
       console.log(task);
+      const res = await createTaskRequest(task); //object
+      const data = await res.json();
+      console.log('OIE');
+      console.log(data);
    }
 
 
@@ -36,6 +40,7 @@ function TaskForm() {
       <div>
          
          <form onSubmit={handleSubmit}>
+            {/* Título */}
             <input type="text"
             name="title"
             className="border-2 border-gray-700 p-2 rounded-lg bg-zinc-800
@@ -44,6 +49,7 @@ function TaskForm() {
             onChange={handleChange}
             />
 
+            {/* Descrição da task */}
             <textarea name="description"
             rows={3}
             className="border-2 border-gray-700 p-2 rounded-lg bg-zinc-800
@@ -52,13 +58,18 @@ function TaskForm() {
             onChange={handleChange}
             ></textarea>
             
+            {/* Done */}
             <label htmlFor=""
             className="inline-flex items-center gap-x-2">
                <input type="checkbox" 
-               className="h-5 w-5 text-indigo-600"/>
+               className="h-5 w-5 text-indigo-600"
+               onChange = {(e) => setTask({... task, done: e.target.checked})
+               }
+               />
                <span>Done</span>
             </label>
 
+            {/* Btn Submit */}
             <button className="bg-indigo-500 px-3 block py-2 w-full">
                Save
             </button>
